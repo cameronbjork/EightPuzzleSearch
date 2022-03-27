@@ -5,6 +5,7 @@ public class PuzzleNode {
 	private PuzzleNode parent;
 	private double cost; //cost to get to this state
 	private double hCost; //heuristic
+	private double fCost;
 	private int depth;
 	private String previousDirection;
 	
@@ -18,6 +19,7 @@ public class PuzzleNode {
 		cost = 0;
 		hCost = 0;
 		depth = 0;
+		fCost = 0;
 	}
 	
 	public PuzzleNode(PuzzleNode previousNode, PuzzleState s, double c, double h, String direction) {
@@ -25,12 +27,17 @@ public class PuzzleNode {
 		currentState = s;
 		cost = c;
 		hCost = h;
+		fCost = cost + hCost;
 		depth = parent.getDepth() + 1;
 		setPreviousDirection(direction);
 	}
 	
 	public int getDepth() {
 		return depth;
+	}
+	
+	public double getFCost() {
+		return fCost;
 	}
 	
 	private void setPreviousDirection(String direction1) {

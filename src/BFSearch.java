@@ -7,8 +7,8 @@ import org.omg.CosNaming.NamingContextExtPackage.AddressHelper;
 
 public class BFSearch {
 	
-	public static void searchRepeats(int[] board, String mode) {
-		PuzzleNode root = new PuzzleNode(new PuzzleState(board));
+	public static void searchRepeats(int[] board, String mode, int[] goal) {
+		PuzzleNode root = new PuzzleNode(new PuzzleState(board,goal));
 		Queue<PuzzleNode> queue = new LinkedList<PuzzleNode>();
 		
 		queue.add(root);
@@ -16,8 +16,8 @@ public class BFSearch {
 		performSearchRepeats(queue, mode);
 	}
 	
-	public static void searchNoRepeats(int[] board, String mode) {
-		PuzzleNode root = new PuzzleNode(new PuzzleState(board));
+	public static void searchNoRepeats(int[] board, String mode, int[] goal) {
+		PuzzleNode root = new PuzzleNode(new PuzzleState(board,goal));
 		Queue<PuzzleNode> queue = new LinkedList<PuzzleNode>();
 		
 		queue.add(root);
@@ -53,7 +53,6 @@ public class BFSearch {
 			
 			//if the root node is not the goal state
 			if (!tempNode.getCurrentState().isGoal() && tempNode.getDepth() <= 10) {
-				 
 				//Generate the successors for the root
 				ArrayList<PuzzleState> tempSuccessors = tempNode.getCurrentState().genSuccessors();
 				
@@ -63,6 +62,9 @@ public class BFSearch {
 					PuzzleNode newNode = new PuzzleNode(tempNode, tempSuccessors.get(i), tempNode.getCost() + tempSuccessors.get(i).findCost(), 0, tempSuccessors.get(i).getDirection());
 					//add to queue
 					q.add(newNode);
+					if(mode.equals("-v")) {
+						System.out.println(newNode.getCurrentState().toString());
+					}
 				}
 				
 			} else {
@@ -129,6 +131,9 @@ public class BFSearch {
 					//add to queue if not repeated
 					if (!checkForRepeats(newNode)) {
 						q.add(newNode);
+						if (mode.equals("-v")) {
+							System.out.println(newNode.getCurrentState().toString());
+						}
 					}
 				}
 				

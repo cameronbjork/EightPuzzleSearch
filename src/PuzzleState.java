@@ -11,7 +11,7 @@ public class PuzzleState {
 	private final int PUZZLE_SIZE = 9;
 	private int outOfPlace = 0;
 	
-	private final int[] GOAL = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 0};
+	private int[] goal;
 	
 	private int[] currentBoard;
 	
@@ -23,8 +23,9 @@ public class PuzzleState {
 	 * 
 	 * @param board - the board for new state to be create
 	 */
-	public PuzzleState(int[] board) {
+	public PuzzleState(int[] board, int[] inGoal) {
 		currentBoard = board;
+		goal = inGoal;
 		setOutOfPlace();
 	}
 	
@@ -33,7 +34,7 @@ public class PuzzleState {
 	 * @return
 	 */
 	public boolean isGoal() {
-		return Arrays.equals(currentBoard, GOAL);
+		return Arrays.equals(currentBoard, goal);
 	}
 	
 	/** Checks if current board equals inputed state
@@ -58,7 +59,7 @@ public class PuzzleState {
 	 */
 	public void setOutOfPlace() {
 		for (int i = 0; i < currentBoard.length; i++) {
-			if (currentBoard[i] != GOAL[i]) {
+			if (currentBoard[i] != goal[i]) {
 				outOfPlace++;
 			}
 		}
@@ -143,7 +144,7 @@ public class PuzzleState {
 		copy[goTo] = currentBoard[hole];
 		copy[hole] = temp;
 		
-		PuzzleState newPuzzle = new PuzzleState(copy);
+		PuzzleState newPuzzle = new PuzzleState(copy, goal);
 		newPuzzle.setDirection(direction);
 		
 		successors.add(newPuzzle);
@@ -167,10 +168,10 @@ public class PuzzleState {
 			//Check which spot the space is at
 			int goalNumber;
 			
-			if (GOAL[i] == 0)
+			if (goal[i] == 0)
 				goalNumber = 9;
 			else
-				goalNumber = GOAL[i];
+				goalNumber = goal[i];
 			cost += Math.abs(currentBoard[i] - goalNumber);
 		}
 		return cost;
